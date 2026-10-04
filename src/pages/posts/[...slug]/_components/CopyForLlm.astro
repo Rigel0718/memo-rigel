@@ -1,0 +1,34 @@
+---
+import IconCopy from "@/assets/icons/IconCopy.svg";
+import { serializeLlmCopyData, type LlmCopyData } from "@/utils/copyForLlm";
+
+interface Props {
+  data: LlmCopyData;
+}
+
+const { data } = Astro.props;
+---
+
+<script
+  id="llm-copy-data"
+  type="application/json"
+  is:inline
+  data-pagefind-ignore
+  set:html={serializeLlmCopyData(data)}
+/>
+<template id="llm-section-copy-template">
+  <button
+    type="button"
+    class="text-muted-foreground hover:text-accent focus-visible:outline-accent ms-2 inline-flex cursor-pointer items-center gap-1 rounded p-1 align-middle text-xs font-normal focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-wait"
+    data-pagefind-ignore
+  >
+    <IconCopy class="size-4" aria-hidden="true" />
+    <span data-copy-label></span>
+  </button>
+</template>
+<span id="llm-copy-status" class="sr-only" role="status" data-pagefind-ignore
+></span>
+
+<script>
+  import "@/scripts/copyForLlm";
+</script>

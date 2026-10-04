@@ -17,6 +17,8 @@ import AdjacentPostNav from "./_components/AdjacentPostNav.astro";
 import config from "@/config";
 import { POST_TOPICS } from "@/config/postTopics";
 import PostToc from "./_components/PostToc.astro";
+import CopyForLlm from "./_components/CopyForLlm.astro";
+import { createLlmCopyData } from "@/utils/copyForLlm";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
@@ -87,6 +89,7 @@ const {
 } = post.data;
 
 const { Content, headings } = await render(post);
+const llmCopyData = createLlmCopyData(post.body ?? "", title, headings);
 
 let ogImageUrl: string | undefined;
 
@@ -129,6 +132,7 @@ const ogImage = ogImageUrl
     ]}
     data-pagefind-body
   >
+    <CopyForLlm data={llmCopyData} />
     <PostToc
       {headings}
       prevPost={isSeries ? prevPost : null}

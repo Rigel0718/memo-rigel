@@ -93,6 +93,7 @@ AstroPaper에 포함되어 있던 예제 게시물은 제거된 상태다. 새 �
 - `npm run build`: 오래된 Content Layer cache를 제거하는 `astro sync --force` → `astro check` → `astro build` → `pagefind --site dist` → 생성된 `dist/pagefind`를 `public/pagefind/`에 복사.
 - `npm run preview`: production build preview.
 - `npm run lint`, `npm run format:check`: 정적 검사와 formatting 검사.
+- `npm test`: Node 내장 test runner로 Copy for LLM의 HTML 제거, 원문 보존, Section 범위, 실제 Markdown 포스트와 Astro heading 연결을 검증한다.
 
 Astro build 산출물은 `dist/`이며 source로 수정하지 않는다. Pagefind는 완성된 HTML을 색인하므로 production build 뒤에 실행된다. 검색 UI는 `getAssetPath("pagefind/")`를 bundle path로 받아 `/memo-rigel` 배포에서도 동작하고, development에서는 기존에 생성된 `public/pagefind` 결과를 사용한다.
 
@@ -116,3 +117,9 @@ GitHub Actions는 `main` branch push 시 `withastro/action`으로 install/build/
 active 항목은 IntersectionObserver가 heading과 본문 끝을 관찰해 `aria-current="location"`으로 표시한다. 첫 장을 기본 선택하고, 본문 끝이 보이면 짧은 마지막 장도 선택한다. hash 이동과 resize에도 갱신하며, ClientRouter 전환 전에 observer와 window listener를 정리한다. 별도의 scroll listener나 heading ID 생성 로직은 추가하지 않는다.
 
 상세 route는 `POST_TOPICS`에 등록된 컬렉션/시리즈 경로 prefix로 같은 시리즈의 공개 게시물을 모으고, 기존 시리즈 목차와 동일한 파일명 숫자 순서(`id.localeCompare(..., "en", { numeric: true })`)로 이전/다음을 결정한다. sidebar와 기존 하단 navigation이 같은 결과를 사용하며, 첫/마지막 에피소드의 없는 링크는 표시하지 않는다. draft와 예약 글은 기존 `getSortedPosts` 필터를 따른다. 시리즈 밖의 글은 기존 날짜순 하단 navigation을 유지하며 sidebar에는 에피소드 이동을 표시하지 않는다. 모든 에피소드 URL은 `getPostUrl`을 재사용한다.
+
+## Copy for LLM
+
+`src/utils/copyForLlm.ts`는 상세 route에서 `post.body`를 build time에 `unified`, `remark-parse`, `remark-gfm`으로 분석한다. AST의 source offset으로 현재 사용 중인 Light/Dark diagram 이미지, `<details>` wrapper와 `다이어그램 원본 보기 (Mermaid)` summary와 다이어그램 이미지 제거로 비어버린 `not-prose` `<div>` wrapper만 제거하고 나머지 Markdown과 내부 source code는 원문 그대로 유지한다. clean 본문의 최상위 H2별 범위를 계산하고 `render(post).headings`의 텍스트·개수를 검증해 기존 slug와 연결한다. 별도 Markdown 파일이나 endpoint는 생성하지 않는다. 참조형 링크·각주 dependency 추적과 MDX 동적 표현식 처리는 지원 범위에서 제외한다.
+
+`CopyForLlm.astro`는 제목, clean 본문 하나, Section 범위를 안전하게 escape한 페이지 JSON으로 전달한다. `PostToc.astro`의 에피소드 이동 위에 전체 복사 버튼을 두고, `src/scripts/copyForLlm.ts`가 H2마다 별도 Copy 버튼을 붙인다. 전체 복사는 `# 제목`과 본문, 장 복사는 해당 H2부터 다음 H2 직전(마지막 장은 끝)까지를 Clipboard에 기록한다. 성공·실패 상태를 잠시 표시하고 screen reader에 알린다. 기존 TOC와 같이 전체 복사 버튼은 1280px 이상에서 표시되며 장 복사는 작은 화면에서도 사용할 수 있다. ClientRouter의 `astro:page-load`에서 초기화하고 `astro:before-swap`에서 AbortController로 이벤트와 타이머·장 버튼을 정리한다.

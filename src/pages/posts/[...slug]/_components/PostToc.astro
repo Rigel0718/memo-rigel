@@ -3,6 +3,7 @@ import type { MarkdownHeading } from "astro";
 import type { CollectionEntry } from "astro:content";
 import IconArrowLeft from "@/assets/icons/IconArrowLeft.svg";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
+import IconCopy from "@/assets/icons/IconCopy.svg";
 import { getPostUrl } from "@/utils/getPostPaths";
 import config from "@/config";
 
@@ -24,7 +25,7 @@ const locale = Astro.currentLocale ?? config.site.lang;
 ---
 
 {
-  (chapters.length > 0 || prevPost || nextPost) && (
+  (
     <aside class="post-toc-rail" data-pagefind-ignore>
       <div class="post-toc text-muted-foreground text-sm">
         {chapters.length > 0 && (
@@ -46,6 +47,17 @@ const locale = Astro.currentLocale ?? config.site.lang;
             </ol>
           </nav>
         )}
+        <div class="border-muted mt-5 border-t pt-3">
+          <button
+            type="button"
+            data-copy-page
+            aria-label="이 에피소드 전체를 Markdown으로 복사"
+            class="hover:text-accent focus-visible:outline-accent flex cursor-pointer items-center gap-2 rounded p-2 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-wait"
+          >
+            <IconCopy class="size-4" aria-hidden="true" />
+            <span data-copy-label>Copy for LLM</span>
+          </button>
+        </div>
         {(prevPost || nextPost) && (
           <nav
             aria-label="시리즈 에피소드 이동"
