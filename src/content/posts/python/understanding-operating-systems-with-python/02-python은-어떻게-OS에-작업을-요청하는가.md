@@ -102,12 +102,12 @@ Linux에서 `os.read()`를 호출하는 과정을 단순화하면 다음과 같�
 
 <img
   class="dark:hidden"
-  src="/Astro/diagrams/system-call-sequence-light.svg"
+  src="/memo-rigel/diagrams/system-call-sequence-light.svg"
   alt="Python os.read 호출이 Linux 커널의 파일 시스템 처리와 모드 전환을 거쳐 결과를 반환하는 순서도"
 />
 <img
   class="hidden dark:block"
-  src="/Astro/diagrams/system-call-sequence-dark.svg"
+  src="/memo-rigel/diagrams/system-call-sequence-dark.svg"
   alt="Python os.read 호출이 Linux 커널의 파일 시스템 처리와 모드 전환을 거쳐 결과를 반환하는 순서도"
 />
 

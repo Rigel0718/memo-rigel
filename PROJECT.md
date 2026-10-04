@@ -2,7 +2,7 @@
 
 이 저장소는 AstroPaper 6.1.0을 기반으로 한 정적 기술 블로그다. Python, Backend, AI Agent 학습 내용을 Markdown/MDX로 작성해 게시하는 용도이며, AstroPaper의 페이지·컴포넌트·유틸리티 구조를 유지한 채 `astro-paper.config.ts`를 중심으로 동작을 설정한다.
 
-현재 런타임 기반은 Astro 7, TypeScript strict 설정, Tailwind CSS 4다. 사이트는 한국어(`ko`)를 기본 locale로 삼고 GitHub Pages의 프로젝트 사이트 `https://Rigel0718.github.io/Astro`에 정적 배포되도록 구성되어 있다. UI 번역 리소스는 현재 영어 파일만 있어, 한국어 locale에서도 `useTranslations()`의 영어 fallback을 사용한다.
+현재 런타임 기반은 Astro 7, TypeScript strict 설정, Tailwind CSS 4다. 사이트는 한국어(`ko`)를 기본 locale로 삼고 GitHub Pages의 프로젝트 사이트 `https://Rigel0718.github.io/memo-rigel`에 정적 배포되도록 구성되어 있다. UI 번역 리소스는 현재 영어 파일만 있어, 한국어 locale에서도 `useTranslations()`의 영어 fallback을 사용한다.
 
 ## 핵심 디렉터리와 책임
 
@@ -30,7 +30,7 @@
 - 공유 대상은 WhatsApp, Facebook, X, Telegram, Pinterest, email이다.
 - 기본 OG 파일은 `public/default-og.jpg`다.
 
-`astro.config.ts`는 Astro 자체 구성을 담당한다. `site`는 AstroPaper 설정의 `https://Rigel0718.github.io`, `base`는 `/Astro`이며, 기본 locale `ko`에는 URL prefix를 붙이지 않는다. MDX와 sitemap integration, Tailwind Vite plugin, Google Sans Code font, Astro SVG optimizer가 설정되어 있다. Markdown은 TOC/collapse와 callout plugin을 거치며, Shiki light/dark theme와 filename·highlight·diff transformer를 사용한다. 게시물의 `mermaid` 코드 블록은 `PostLayout.astro`에서 불러오는 Mermaid 스크립트가 SVG 다이어그램으로 변환하며, 사이트 테마와 View Transitions 탐색에 맞춰 다시 렌더링한다.
+`astro.config.ts`는 Astro 자체 구성을 담당한다. `site`는 AstroPaper 설정의 `https://Rigel0718.github.io`, `base`는 `/memo-rigel`이며, 기본 locale `ko`에는 URL prefix를 붙이지 않는다. MDX와 sitemap integration, Tailwind Vite plugin, Google Sans Code font, Astro SVG optimizer가 설정되어 있다. Markdown은 TOC/collapse와 callout plugin을 거치며, Shiki light/dark theme와 filename·highlight·diff transformer를 사용한다. 게시물의 `mermaid` 코드 블록은 `PostLayout.astro`에서 불러오는 Mermaid 스크립트가 SVG 다이어그램으로 변환하며, 사이트 테마와 View Transitions 탐색에 맞춰 다시 렌더링한다.
 
 `tsconfig.json`은 Astro strict preset을 사용하며 `@/*`를 `src/*`에, `@/astro-paper.config`를 root 설정 파일에 연결한다. ESLint는 Astro 권장 규칙과 TypeScript parser를 사용하고 `console` 호출을 오류로 취급한다.
 
@@ -70,7 +70,7 @@ AstroPaper에 포함되어 있던 예제 게시물은 제거된 상태다. 새 �
 
 ## Base path와 URL 처리
 
-사이트가 domain root가 아닌 `/Astro` 아래 배포되므로 내부 URL을 직접 root-relative 문자열로 만들지 않는다.
+사이트가 domain root가 아닌 `/memo-rigel` 아래 배포되므로 내부 URL을 직접 root-relative 문자열로 만들지 않는다.
 
 - page/navigation URL과 게시물 URL은 주로 Astro의 `getRelativeLocaleUrl()`을 사용한다. 이 함수가 locale routing과 설정된 base를 반영한다.
 - `src/utils/withBase.ts`의 `getAssetPath()`는 favicon, sitemap, Pagefind bundle, 기본 OG 이미지 같은 public asset 경로에 `import.meta.env.BASE_URL`을 붙인다.
@@ -93,7 +93,7 @@ AstroPaper에 포함되어 있던 예제 게시물은 제거된 상태다. 새 �
 - `npm run preview`: production build preview.
 - `npm run lint`, `npm run format:check`: 정적 검사와 formatting 검사.
 
-Astro build 산출물은 `dist/`이며 source로 수정하지 않는다. Pagefind는 완성된 HTML을 색인하므로 production build 뒤에 실행된다. 검색 UI는 `getAssetPath("pagefind/")`를 bundle path로 받아 `/Astro` 배포에서도 동작하고, development에서는 기존에 생성된 `public/pagefind` 결과를 사용한다.
+Astro build 산출물은 `dist/`이며 source로 수정하지 않는다. Pagefind는 완성된 HTML을 색인하므로 production build 뒤에 실행된다. 검색 UI는 `getAssetPath("pagefind/")`를 bundle path로 받아 `/memo-rigel` 배포에서도 동작하고, development에서는 기존에 생성된 `public/pagefind` 결과를 사용한다.
 
 GitHub Actions는 `main` branch push 시 `withastro/action`으로 install/build/upload한 뒤 `actions/deploy-pages`로 GitHub Pages에 배포한다. Sitemap integration은 archive 기능 설정을 반영하고, RSS·robots·OG endpoint도 정적 build 결과에 포함된다.
 

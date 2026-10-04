@@ -91,12 +91,12 @@ FD 테이블의 각 항목은 커널이 관리하는 열린 파일 정보(Open F
 
 <img
   class="dark:hidden"
-  src="/Astro/diagrams/fd-table-architecture-light.svg"
+  src="/memo-rigel/diagrams/fd-table-architecture-light.svg"
   alt="프로세스의 FD 3과 FD 4가 커널의 서로 다른 열린 파일 정보를 거쳐 동일한 example.txt 파일 메타데이터를 참조하는 구조"
 />
 <img
   class="hidden dark:block"
-  src="/Astro/diagrams/fd-table-architecture-dark.svg"
+  src="/memo-rigel/diagrams/fd-table-architecture-dark.svg"
   alt="프로세스의 FD 3과 FD 4가 커널의 서로 다른 열린 파일 정보를 거쳐 동일한 example.txt 파일 메타데이터를 참조하는 구조"
 />
 

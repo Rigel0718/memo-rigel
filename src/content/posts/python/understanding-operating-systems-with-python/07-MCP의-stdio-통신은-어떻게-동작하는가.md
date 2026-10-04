@@ -109,12 +109,12 @@ process = subprocess.Popen(
 <div class="not-prose my-8 overflow-x-auto rounded-2xl" role="group" aria-label="MCP Client와 Server의 stdio 통신 아키텍처. 모바일에서는 가로로 스크롤할 수 있습니다.">
 <img
   class="block h-auto w-full min-w-[760px] max-w-none dark:hidden"
-  src="/Astro/diagrams/mcp-stdio-architecture-light.svg"
+  src="/memo-rigel/diagrams/mcp-stdio-architecture-light.svg"
   alt="부모 프로세스인 MCP Client가 자식 프로세스인 MCP Server를 실행하고, 두 단방향 커널 Pipe가 요청을 Server stdin FD 0으로 전달하고 JSON-RPC 응답을 Server stdout FD 1에서 Client로 돌려보내며, stderr FD 2 로그는 별도 통로로 분리된 구조"
 />
 <img
   class="hidden h-auto w-full min-w-[760px] max-w-none dark:block"
-  src="/Astro/diagrams/mcp-stdio-architecture-dark.svg"
+  src="/memo-rigel/diagrams/mcp-stdio-architecture-dark.svg"
   alt="부모 프로세스인 MCP Client가 자식 프로세스인 MCP Server를 실행하고, 두 단방향 커널 Pipe가 요청을 Server stdin FD 0으로 전달하고 JSON-RPC 응답을 Server stdout FD 1에서 Client로 돌려보내며, stderr FD 2 로그는 별도 통로로 분리된 구조"
 />
 </div>

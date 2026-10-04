@@ -40,13 +40,13 @@ PROJECT.md와 실제 source가 다르다면 실제 source를 기준으로 판단
 Repository:
 
 ```text id="jzt9pj"
-Astro
+memo-rigel
 ```
 
 Deployment base path:
 
 ```text id="9x5j9m"
-/Astro
+/memo-rigel
 ```
 
 `astro.config.ts`의 배포 설정은 이 base path와 호환되어야 한다.
