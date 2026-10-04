@@ -12,9 +12,9 @@ import config from "@/config";
 import { POST_TOPICS } from "@/config/postTopics";
 
 const locale = Astro.currentLocale ?? config.site.lang;
-const pythonTopic = POST_TOPICS.python;
-const series = pythonTopic.series.understandingOperatingSystemsWithPython;
-const seriesPrefix = `${pythonTopic.slug}/${series.slug}/`;
+const collection = POST_TOPICS.understandingWithPython;
+const series = collection.series.understandingOperatingSystemsWithPython;
+const seriesPrefix = `${collection.slug}/${series.slug}/`;
 const posts = getSortedPosts(await getCollection("posts"))
   .filter((post) => post.id.startsWith(seriesPrefix))
   .sort((a, b) => a.id.localeCompare(b.id, "en", { numeric: true }));

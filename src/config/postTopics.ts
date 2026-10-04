@@ -33,7 +33,13 @@ export const POST_TOPICS = {
           "파이썬의 함수와 Method가 만들어지고 연결되는 과정을 순서대로 살펴보는 10개 에피소드 시리즈입니다.",
         episodeCount: 7,
       },
-
+    },
+  },
+  understandingWithPython: {
+    slug: "understanding-with-python",
+    title: "Python으로 이해하기",
+    description: "Python을 통해 개발의 기반이 되는 원리와 구조를 이해합니다.",
+    series: {
       understandingOperatingSystemsWithPython: {
         slug: "understanding-operating-systems-with-python",
         title: "Python으로 이해하는 운영체제",

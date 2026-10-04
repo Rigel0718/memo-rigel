@@ -96,13 +96,28 @@ Astro의 Content Collections와 기존 AstroPaper의 post 구조에서 자연스
 
 일반적인 블로그 글을 작성하기 위해 불필요한 custom markup이나 component 사용을 요구하지 않는다.
 
+### 콘텐츠 계층과 명칭
+
+블로그 콘텐츠는 Collection → Series → Episode 계층으로 부른다.
+
+- Collection(컬렉션): 관련 시리즈를 묶는 단위. 예: `Python 개념 톺아보기`.
+- Series(시리즈): 하나의 주제를 순서대로 다루는 글 묶음. 예: `파이썬 객체에 대한 이해`.
+- Episode(에피소드): 시리즈의 개별 글. 예: `01. Python은 왜 모든 것을 객체로 다룰까`.
+
+이 명칭은 블로그의 콘텐츠 분류이며, Astro의 Content Collections(`posts`, `pages`)와 구분한다. 컬렉션과 시리즈의 메타데이터는 `src/config/postTopics.ts`에서 관리한다.
+
+- `Python 개념 톺아보기`(`POST_TOPICS.python`, `python`): 파이썬 객체, 실행, 함수와 Method 시리즈.
+- `Python으로 이해하기`(`POST_TOPICS.understandingWithPython`, `understanding-with-python`): `Python으로 이해하는 운영체제` 시리즈. 설명은 `Python을 통해 개발의 기반이 되는 원리와 구조를 이해합니다.`로 사용한다.
+
+시리즈 route와 에피소드 디렉터리는 소속 컬렉션의 slug 아래에 둔다.
+
 ### Python 시리즈 추가
 
-새 Python 시리즈는 기존 시리즈와 같은 구조로 추가한다.
+새 Python 시리즈는 소속 컬렉션을 선택하고 기존 시리즈와 같은 구조로 추가한다. 아래의 `<collection-slug>`는 `python` 또는 `understanding-with-python`이다.
 
-1. `src/config/postTopics.ts`의 `POST_TOPICS.python.series`에 slug, title, description, metaDescription, 전체 episodeCount를 등록한다.
-2. `src/pages/posts/python/<series-slug>.astro`에 기존 Python 시리즈 상세 페이지를 재사용한 목차 route를 추가하고, 등록한 series key와 게시물 경로 prefix만 새 시리즈에 맞춘다.
-3. `src/content/posts/python/<series-slug>/` 디렉터리와 `_episode-template.md`를 만든다. 템플릿에는 해당 시리즈 tag를 기본으로 넣고 `draft: true`로 둔다.
+1. `src/config/postTopics.ts`의 `POST_TOPICS.<collection-key>.series`에 slug, title, description, metaDescription, 전체 episodeCount를 등록한다.
+2. `src/pages/posts/<collection-slug>/<series-slug>.astro`에 기존 Python 시리즈 상세 페이지를 재사용한 목차 route를 추가하고, 등록한 series key와 게시물 경로 prefix만 새 시리즈에 맞춘다.
+3. `src/content/posts/<collection-slug>/<series-slug>/` 디렉터리와 `_episode-template.md`를 만든다. 템플릿에는 해당 시리즈 tag를 기본으로 넣고 `draft: true`로 둔다.
 4. 에피소드는 템플릿을 복사해 `01-주제.md`, `02-주제.md`처럼 두 자리 번호로 시작하는 파일명으로 작성한다. 파일명 순서가 목차 순서가 되며, `_`로 시작하는 템플릿은 Content Collection에서 제외된다.
 5. 계획한 전체 편수가 바뀌면 `episodeCount`를 함께 갱신한다. 링크에는 Astro의 locale/base-path 처리 방식을 유지한다.
 

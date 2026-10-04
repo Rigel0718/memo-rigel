@@ -43,7 +43,7 @@
 
 게시물 디렉터리의 하위 폴더는 URL 경로가 될 수 있지만, 이름이 `_`로 시작하는 폴더 segment는 URL에서 제외된다. 예를 들어 `_releases/astro-paper-6.md`는 `/posts/astro-paper-6` 형태가 된다. `getPostPaths.ts`가 이 규칙과 locale/base 적용을 한곳에서 처리한다.
 
-`postFilter()`는 draft를 항상 제외하고, production에서는 예약 시간이 지나지 않은 글도 제외한다. development에서는 작성 편의를 위해 draft가 아닌 예약 글을 표시한다. `getSortedPosts()`는 이 필터를 적용한 뒤 `modDatetime` 우선, 없으면 `pubDatetime` 기준 최신순으로 정렬한다. tag 목록과 archive도 같은 필터 계열을 사용한다. Python 주제와 그 아래 `파이썬 객체에 대한 이해`, `파이썬 실행에 대한 이해`, `파이썬 함수와 method에 대한 이해`, `Python으로 이해하는 운영체제` 시리즈의 제목, 설명, slug, 전체 에피소드 수는 `src/config/postTopics.ts`에서 함께 관리한다.
+`postFilter()`는 draft를 항상 제외하고, production에서는 예약 시간이 지나지 않은 글도 제외한다. development에서는 작성 편의를 위해 draft가 아닌 예약 글을 표시한다. `getSortedPosts()`는 이 필터를 적용한 뒤 `modDatetime` 우선, 없으면 `pubDatetime` 기준 최신순으로 정렬한다. tag 목록과 archive도 같은 필터 계열을 사용한다. 컬렉션 `Python 개념 톺아보기`와 `Python으로 이해하기`, 그리고 `파이썬 객체에 대한 이해`, `파이썬 실행에 대한 이해`, `파이썬 함수와 method에 대한 이해`, `Python으로 이해하는 운영체제` 시리즈의 제목, 설명, slug, 전체 에피소드 수는 `src/config/postTopics.ts`에서 함께 관리한다.
 
 AstroPaper에 포함되어 있던 예제 게시물은 제거된 상태다. 새 글은 `src/content/posts/`에 Markdown 또는 MDX 파일로 추가하며, About 콘텐츠는 `src/content/pages/about.md`에서 관리한다.
 
@@ -52,13 +52,14 @@ AstroPaper에 포함되어 있던 예제 게시물은 제거된 상태다. 새 �
 주요 정적 route는 다음 책임으로 나뉜다.
 
 - `/`: featured 글과 최근 글을 보여 주는 홈.
-- `/posts`: 주제별 게시물 허브 목록. 현재는 Python 허브 진입 항목만 표시하며, Python 하위 게시물은 이 페이지에 직접 표시하지 않는다.
+- `/posts`: 주제별 게시물 허브 목록. `Python 개념 톺아보기`와 `Python으로 이해하기` 컬렉션을 표시하며, 개별 에피소드는 이 페이지에 직접 표시하지 않는다.
 - `/posts/<slug>`: Markdown/MDX 본문, 날짜, tag, 공유 링크, 인접 글 navigation, 읽기 진행률, heading anchor, code copy, 이미지 lightbox를 제공하는 상세 페이지.
-- `/posts/python`: Python 주제별 시리즈를 소개하는 허브. Header의 `Posts` 하위 `Python` 항목에서 진입한다.
+- `/posts/python`: `Python 개념 톺아보기` 컬렉션의 객체, 실행, 함수와 Method 시리즈를 소개하는 허브.
 - `/posts/python/understanding-python-objects`: `파이썬 객체에 대한 이해` 시리즈의 8개 에피소드 목차와 게시 진행률을 보여 준다. `src/content/posts/python/understanding-python-objects/`의 게시물을 파일명 순서로 자동 수집한다.
 - `/posts/python/understanding-python-execution`: `파이썬 실행에 대한 이해` 시리즈의 11개 에피소드 목차와 게시 진행률을 보여 준다. `src/content/posts/python/understanding-python-execution/`의 게시물을 파일명 순서로 자동 수집한다.
 - `/posts/python/understanding-python-functions-and-methods`: `파이썬 함수와 method에 대한 이해` 시리즈의 에피소드 목차와 게시 진행률을 보여 준다. `src/content/posts/python/understanding-python-functions-and-methods/`의 게시물을 파일명 순서로 자동 수집한다.
-- `/posts/python/understanding-operating-systems-with-python`: `Python으로 이해하는 운영체제` 시리즈의 7개 에피소드 목차와 게시 진행률을 보여 준다. `src/content/posts/python/understanding-operating-systems-with-python/`의 게시물을 파일명 순서로 자동 수집한다.
+- `/posts/understanding-with-python`: `Python으로 이해하기` 컬렉션 허브. 설명은 `Python을 통해 개발의 기반이 되는 원리와 구조를 이해합니다.`이며 운영체제 시리즈를 포함한다. 두 컬렉션 모두 Header의 `Posts` 하위 항목에서 진입한다.
+- `/posts/understanding-with-python/understanding-operating-systems-with-python`: `Python으로 이해하는 운영체제` 시리즈의 7개 에피소드 목차와 게시 진행률을 보여 준다. `src/content/posts/understanding-with-python/understanding-operating-systems-with-python/`의 게시물을 파일명 순서로 자동 수집한다.
 - `/tags`와 `/tags/<tag>`: tag 색인 및 tag별 pagination.
 - `/archives`: 연도·월별 archive. feature가 꺼지면 404로 rewrite된다.
 - `/search`: Pagefind UI. search feature가 꺼지면 404로 rewrite된다.
@@ -80,9 +81,9 @@ AstroPaper에 포함되어 있던 예제 게시물은 제거된 상태다. 새 �
 
 새 링크나 asset 경로도 이 기존 utility 또는 Astro URL API를 재사용해야 한다.
 
-### Python 시리즈 작성 위치
+### 컬렉션과 Python 시리즈 작성 위치
 
-각 Python 시리즈의 에피소드는 `src/content/posts/python/<series-slug>/`에 `01-주제.md`, `02-주제.md`처럼 두 자리 번호로 시작하는 Markdown 파일을 추가한다. 이 파일명 순서가 시리즈 목차 순서가 되며, 실제 글 URL은 `/posts/python/<series-slug>/<파일명-slug>` 형태다. 시리즈 디렉터리의 `_episode-template.md`는 Content Collection에서 제외되는 작성용 템플릿이므로 복사한 뒤 `_`로 시작하지 않는 파일명으로 바꾸어 사용한다. 현재 새 글 템플릿은 `파이썬 함수와 method에 대한 이해` 디렉터리에 있으며, 다른 시리즈에도 같은 형식으로 둘 수 있다.
+콘텐츠 명칭은 Collection(컬렉션) → Series(시리즈) → Episode(에피소드)이며 Astro의 Content Collections와 구분한다. 각 Python 시리즈의 에피소드는 소속 컬렉션에 따라 `src/content/posts/<collection-slug>/<series-slug>/`에 `01-주제.md`, `02-주제.md`처럼 두 자리 번호로 시작하는 Markdown 파일을 추가한다. 이 파일명 순서가 시리즈 목차 순서가 되며, 실제 글 URL은 `/posts/<collection-slug>/<series-slug>/<파일명-slug>` 형태다. 시리즈 디렉터리의 `_episode-template.md`는 Content Collection에서 제외되는 작성용 템플릿이므로 복사한 뒤 `_`로 시작하지 않는 파일명으로 바꾸어 사용한다. 현재 새 글 템플릿은 `파이썬 함수와 method에 대한 이해` 디렉터리에 있으며, 다른 시리즈에도 같은 형식으로 둘 수 있다.
 
 ## Build와 deployment
 
