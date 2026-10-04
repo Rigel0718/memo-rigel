@@ -1,0 +1,165 @@
+---
+import type { MarkdownHeading } from "astro";
+import type { CollectionEntry } from "astro:content";
+import IconArrowLeft from "@/assets/icons/IconArrowLeft.svg";
+import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
+import { getPostUrl } from "@/utils/getPostPaths";
+import config from "@/config";
+
+type AdjacentPost = {
+  id: CollectionEntry<"posts">["id"];
+  title: string;
+  filePath: string | undefined;
+} | null;
+
+interface Props {
+  headings: MarkdownHeading[];
+  prevPost: AdjacentPost;
+  nextPost: AdjacentPost;
+}
+
+const { headings, prevPost, nextPost } = Astro.props;
+const chapters = headings.filter((heading) => heading.depth === 2);
+const locale = Astro.currentLocale ?? config.site.lang;
+---
+
+{
+  (chapters.length > 0 || prevPost || nextPost) && (
+    <aside class="post-toc-rail" data-pagefind-ignore>
+      <div class="post-toc text-muted-foreground text-sm">
+        {chapters.length > 0 && (
+          <nav aria-labelledby="post-toc-title">
+            <p id="post-toc-title" class="mb-3 font-medium">
+              On this page
+            </p>
+            <ol class="space-y-2">
+              {chapters.map((heading) => (
+                <li>
+                  <a
+                    class="toc-link hover:text-accent block leading-6 wrap-break-word"
+                    href={`#${heading.slug}`}
+                  >
+                    {heading.text}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )}
+        {(prevPost || nextPost) && (
+          <nav
+            aria-label="시리즈 에피소드 이동"
+            class="border-muted mt-5 grid grid-cols-2 border-t pt-3"
+          >
+            {prevPost && (
+              <a
+                href={getPostUrl(prevPost.id, prevPost.filePath, locale)}
+                aria-label={`이전 에피소드: ${prevPost.title}`}
+                title={prevPost.title}
+                class="hover:text-accent flex items-center gap-2 justify-self-start rounded p-2"
+              >
+                <IconArrowLeft class="size-4" aria-hidden="true" />
+                <span class="text-xs">이전</span>
+              </a>
+            )}
+            {nextPost && (
+              <a
+                href={getPostUrl(nextPost.id, nextPost.filePath, locale)}
+                aria-label={`다음 에피소드: ${nextPost.title}`}
+                title={nextPost.title}
+                class="hover:text-accent col-start-2 flex items-center gap-2 justify-self-end rounded p-2"
+              >
+                <span class="text-xs">다음</span>
+                <IconArrowRight class="size-4" aria-hidden="true" />
+              </a>
+            )}
+          </nav>
+        )}
+      </div>
+    </aside>
+  )
+}
+
+<style>
+  .post-toc-rail {
+    display: none;
+  }
+
+  /* Leave the centered 48rem AstroPaper article at its existing width. */
+  @media (min-width: 80rem) {
+    .post-toc-rail {
+      display: block;
+      position: absolute;
+      inset-block: 0;
+      left: calc(100% + 1.5rem);
+      width: min(15rem, calc((100vw - 48rem) / 2 - 2.5rem));
+    }
+
+    .post-toc {
+      position: sticky;
+      top: 2rem;
+      max-height: calc(100dvh - 4rem);
+      overflow-y: auto;
+      padding: 0.25rem;
+    }
+  }
+
+  .toc-link[aria-current="location"] {
+    color: var(--accent);
+    font-weight: 600;
+  }
+</style>
+
+<script>
+  let cleanup: (() => void) | undefined;
+
+  function initPostToc() {
+    cleanup?.();
+    const links = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>(".toc-link"),
+    );
+    const headings = links.map((link) =>
+      document.getElementById(decodeURIComponent(link.hash.slice(1))),
+    );
+    const end = document.getElementById("article-end");
+    if (!links.length || headings.some((heading) => !heading) || !end) return;
+
+    const update = () => {
+      let active = 0;
+      headings.forEach((heading, index) => {
+        if (heading!.getBoundingClientRect().top <= 32) active = index;
+      });
+      // Short final chapters may never reach the top of the viewport.
+      if (
+        headings[0]!.getBoundingClientRect().top <= 32 &&
+        end.getBoundingClientRect().top <= window.innerHeight &&
+        headings[headings.length - 1]!.getBoundingClientRect().top <
+          window.innerHeight
+      ) {
+        active = links.length - 1;
+      }
+      links.forEach((link, index) => {
+        if (index === active) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      });
+    };
+
+    const observer = new IntersectionObserver(update, {
+      rootMargin: "-32px 0px 0px 0px",
+      threshold: [0, 1],
+    });
+    headings.forEach((heading) => observer.observe(heading!));
+    observer.observe(end);
+    window.addEventListener("hashchange", update);
+    window.addEventListener("resize", update);
+    update();
+    cleanup = () => {
+      observer.disconnect();
+      window.removeEventListener("hashchange", update);
+      window.removeEventListener("resize", update);
+    };
+  }
+
+  document.addEventListener("astro:page-load", initPostToc);
+  document.addEventListener("astro:before-swap", () => cleanup?.());
+</script>

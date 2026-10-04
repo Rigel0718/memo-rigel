@@ -15,35 +15,47 @@ import BackButton from "./_components/BackButton.astro";
 import BackToTopButton from "./_components/BackToTopButton.astro";
 import AdjacentPostNav from "./_components/AdjacentPostNav.astro";
 import config from "@/config";
+import { POST_TOPICS } from "@/config/postTopics";
+import PostToc from "./_components/PostToc.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
   const sortedPosts = getSortedPosts(posts);
 
-  return sortedPosts.map((post, index) => ({
-    params: { slug: getPostSlug(post.id, post.filePath) },
-    props: {
-      post,
-      // sortedPosts is newest-first, so "older" (prev) is a higher index
-      // and "newer" (next) is a lower index.
-      prevPost:
-        index < sortedPosts.length - 1
-          ? {
-              id: sortedPosts[index + 1].id,
-              title: sortedPosts[index + 1].data.title,
-              filePath: sortedPosts[index + 1].filePath,
-            }
-          : null,
-      nextPost:
-        index > 0
-          ? {
-              id: sortedPosts[index - 1].id,
-              title: sortedPosts[index - 1].data.title,
-              filePath: sortedPosts[index - 1].filePath,
-            }
-          : null,
-    },
-  }));
+  const seriesPrefixes = Object.values(POST_TOPICS).flatMap(collection =>
+    Object.values(collection.series).map(
+      series => `${collection.slug}/${series.slug}/`
+    )
+  );
+
+  return sortedPosts.map((post, index) => {
+    const seriesPrefix = seriesPrefixes.find(prefix =>
+      post.id.startsWith(prefix)
+    );
+    const episodes = seriesPrefix
+      ? sortedPosts
+          .filter(episode => episode.id.startsWith(seriesPrefix))
+          .sort((a, b) => a.id.localeCompare(b.id, "en", { numeric: true }))
+      : sortedPosts;
+    const episodeIndex = seriesPrefix
+      ? episodes.findIndex(episode => episode.id === post.id)
+      : index;
+    const adjacent = (entry: CollectionEntry<"posts"> | undefined) =>
+      entry
+        ? { id: entry.id, title: entry.data.title, filePath: entry.filePath }
+        : null;
+
+    return {
+      params: { slug: getPostSlug(post.id, post.filePath) },
+      props: {
+        post,
+        // Series follow episode order; standalone posts retain newest-first navigation.
+        prevPost: adjacent(episodes[episodeIndex + (seriesPrefix ? -1 : 1)]),
+        nextPost: adjacent(episodes[episodeIndex + (seriesPrefix ? 1 : -1)]),
+        isSeries: Boolean(seriesPrefix)
+      }
+    };
+  });
 }
 
 type AdjacentPost = {
@@ -56,9 +68,10 @@ type Props = {
   post: CollectionEntry<"posts">;
   prevPost: AdjacentPost;
   nextPost: AdjacentPost;
+  isSeries: boolean;
 };
 
-const { post, prevPost, nextPost } = Astro.props;
+const { post, prevPost, nextPost, isSeries } = Astro.props;
 const locale = Astro.currentLocale ?? config.site.lang;
 
 const {
@@ -70,10 +83,10 @@ const {
   modDatetime,
   timezone,
   tags,
-  hideEditPost,
+  hideEditPost
 } = post.data;
 
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 
 let ogImageUrl: string | undefined;
 
@@ -110,9 +123,18 @@ const ogImage = ogImageUrl
 
   <main
     id="main-content"
-    class:list={["app-layout", { "mt-8": !config.features.showBackButton }]}
+    class:list={[
+      "app-layout post-with-toc",
+      { "mt-8": !config.features.showBackButton }
+    ]}
     data-pagefind-body
   >
+    <PostToc
+      {headings}
+      prevPost={isSeries ? prevPost : null}
+      nextPost={isSeries ? nextPost : null}
+    />
+
     <h1
       style={{ viewTransitionName: toTransitionName(post.id) }}
       class="text-accent inline-block text-2xl font-bold sm:text-3xl"
@@ -126,7 +148,7 @@ const ogImage = ogImageUrl
         aria-hidden="true"
         class:list={[
           "text-muted-foreground max-sm:hidden",
-          { hidden: !config.features.editPost?.enabled || hideEditPost },
+          { hidden: !config.features.editPost?.enabled || hideEditPost }
         ]}
       >
         |
@@ -139,10 +161,11 @@ const ogImage = ogImageUrl
       class:list={[
         "mt-8 w-full",
         "app-prose max-w-app",
-        "prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)",
+        "prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"
       ]}
     >
       <Content />
+      <div id="article-end" aria-hidden="true"></div>
     </article>
 
     <hr class="my-8 border-dashed" />
@@ -532,3 +555,9 @@ const ogImage = ogImageUrl
     window.scrollTo({ left: 0, top: 0, behavior: "instant" })
   );
 </script>
+
+<style>
+  .post-with-toc {
+    position: relative;
+  }
+</style>

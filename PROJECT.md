@@ -53,7 +53,7 @@ AstroPaper에 포함되어 있던 예제 게시물은 제거된 상태다. 새 �
 
 - `/`: featured 글과 최근 글을 보여 주는 홈.
 - `/posts`: 주제별 게시물 허브 목록. `Python 개념 톺아보기`와 `Python으로 이해하기` 컬렉션을 표시하며, 개별 에피소드는 이 페이지에 직접 표시하지 않는다.
-- `/posts/<slug>`: Markdown/MDX 본문, 날짜, tag, 공유 링크, 인접 글 navigation, 읽기 진행률, heading anchor, code copy, 이미지 lightbox를 제공하는 상세 페이지.
+- `/posts/<slug>`: Markdown/MDX 본문, 날짜, tag, 공유 링크, 시리즈 순서 기반 인접 글 navigation, 우측 Sticky TOC, 읽기 진행률, heading anchor, code copy, 이미지 lightbox를 제공하는 상세 페이지.
 - `/posts/python`: `Python 개념 톺아보기` 컬렉션의 객체, 실행, 함수와 Method 시리즈를 소개하는 허브.
 - `/posts/python/understanding-python-objects`: `파이썬 객체에 대한 이해` 시리즈의 8개 에피소드 목차와 게시 진행률을 보여 준다. `src/content/posts/python/understanding-python-objects/`의 게시물을 파일명 순서로 자동 수집한다.
 - `/posts/python/understanding-python-execution`: `파이썬 실행에 대한 이해` 시리즈의 11개 에피소드 목차와 게시 진행률을 보여 준다. `src/content/posts/python/understanding-python-execution/`의 게시물을 파일명 순서로 자동 수집한다.
@@ -108,3 +108,11 @@ GitHub Actions는 `main` branch push 시 `withastro/action`으로 install/build/
 - 테마: 초기 paint 전에 theme를 적용하는 `Layout.astro` inline script와 navigation 이후 상태를 동기화하는 `src/scripts/theme.ts`.
 - 검색: 글 상세의 `data-pagefind-body`, build script의 Pagefind index 생성, `/search`의 Pagefind UI.
 - 스타일: Tailwind 4 theme token과 `app-layout`, `app-prose`, `active-nav` 같은 기존 utility class.
+
+## 포스트 상세 TOC와 에피소드 이동
+
+`src/pages/posts/[...slug]/_components/PostToc.astro`는 `render(post)`의 headings 중 depth 2만 사용해 기존 Markdown heading ID에 연결하는 목차를 만든다. 80rem(1280px) 이상에서 기존 48rem 본문 너비와 중앙 정렬을 유지하고 우측 여백에 sticky sidebar를 표시한다. 작은 화면에서는 sidebar를 숨기며 기존 하단 navigation을 사용한다. 색상은 기존 muted/accent theme token을 따른다.
+
+active 항목은 IntersectionObserver가 heading과 본문 끝을 관찰해 `aria-current="location"`으로 표시한다. 첫 장을 기본 선택하고, 본문 끝이 보이면 짧은 마지막 장도 선택한다. hash 이동과 resize에도 갱신하며, ClientRouter 전환 전에 observer와 window listener를 정리한다. 별도의 scroll listener나 heading ID 생성 로직은 추가하지 않는다.
+
+상세 route는 `POST_TOPICS`에 등록된 컬렉션/시리즈 경로 prefix로 같은 시리즈의 공개 게시물을 모으고, 기존 시리즈 목차와 동일한 파일명 숫자 순서(`id.localeCompare(..., "en", { numeric: true })`)로 이전/다음을 결정한다. sidebar와 기존 하단 navigation이 같은 결과를 사용하며, 첫/마지막 에피소드의 없는 링크는 표시하지 않는다. draft와 예약 글은 기존 `getSortedPosts` 필터를 따른다. 시리즈 밖의 글은 기존 날짜순 하단 navigation을 유지하며 sidebar에는 에피소드 이동을 표시하지 않는다. 모든 에피소드 URL은 `getPostUrl`을 재사용한다.
