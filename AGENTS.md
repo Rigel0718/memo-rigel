@@ -123,6 +123,19 @@ Astro의 Content Collections와 기존 AstroPaper의 post 구조에서 자연스
 
 시리즈 추가는 configuration과 route 변경을 포함하므로 `npm run build`로 검증하고, 구조나 책임이 달라졌다면 `PROJECT.md`도 갱신한다.
 
+## 브랜드 에셋
+
+`src/assets/brands/`의 브랜드 에셋은 Agent 관련 글에서 공식 문서 등의 출처를 식별하기 위한 작은 아이콘 용도로 사용한다. 블로그의 자체 로고나 제휴·후원 표시로 사용하지 않는다. 각 상표의 소유자는 OpenAI와 Anthropic이다.
+
+- `src/assets/brands/openai.svg`: OpenAI Blossom의 검정 원본 `OpenAI-black-monoblossom.svg`. 출처는 [공식 Design Guidelines](https://openai.com/brand/)와 [공식 로고 다운로드](https://cdn.openai.com/brand/OpenAI-Logos-2025.zip)이며, ZIP 내부 `OpenAI-logos(new)/SVGs/`에서 가져왔다.
+- `src/assets/brands/anthropic.svg`: Anthropic symbol의 Slate 원본 `Anthropic symbol - Slate.svg`. 출처는 [공식 Newsroom](https://www.anthropic.com/news)의 [Download press kit](https://anthropic.com/press-kit)이며, ZIP 내부 `Anthropic media resources/Anthropic logos/Anthropic logos/2 Anthropic symbol/SVG/`에서 가져왔다. Claude 로고와 구분한다.
+
+공식 SVG는 파일명만 바꾸고 내용은 그대로 보관한다. 로고를 다시 그리거나 형태, 비율, path를 수정하지 않으며 제3자 아이콘으로 교체하지 않는다. 색상 변경, `currentColor` 치환, CSS filter, 효과, 자르기 등 브랜드 가이드라인과 충돌할 수 있는 수정은 공식 가이드 확인 없이 하지 않는다. 라이트/다크 모드에서도 임의로 재색칠하지 않고 필요한 공식 색상 버전의 원본을 확인한다.
+
+OpenAI는 Blossom에 색상을 추가하거나 주요 브랜드 표시로 사용하는 것을 금지하며, 지정된 여백과 충분한 빈 공간을 요구한다. OpenAI와 직접 관련된 문맥에서 제공된 모습 그대로 사용하고, 소유권을 인정하며 제휴·보증·후원을 암시하지 않는다. 사용 시 공식 페이지의 최신 Marks usage terms를 따른다.
+
+확인한 Anthropic Press Kit에는 Slate/Ivory 원본이 있으나 별도 브랜드 사용 가이드나 라이선스 문서는 포함되어 있지 않았다(확인일: 2026-10-06). 다운로드 가능하다는 사실을 임의 변형이나 무제한 사용 허가로 해석하지 않는다. 추가 사용 조건이나 변형 허용 여부가 필요하면 공식 자료 또는 `press@anthropic.com`을 통해 확인한다.
+
 ## 검증
 
 Code 또는 configuration을 변경한 뒤에는 다음 명령을 실행한다.
