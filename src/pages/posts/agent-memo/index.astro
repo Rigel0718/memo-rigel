@@ -1,0 +1,25 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import Main from "@/components/Main.astro";
+import Footer from "@/components/Footer.astro";
+import config from "@/config";
+import { POST_TOPICS } from "@/config/postTopics";
+
+const collection = POST_TOPICS.agentMemo;
+---
+
+<Layout
+  title={`${collection.title} | ${config.site.title}`}
+  description={collection.description}
+>
+  <Header />
+  <Breadcrumb />
+
+  <Main pageTitle={collection.title} pageDesc={collection.description}>
+    <p class="text-muted mt-8">아직 등록된 시리즈가 없습니다.</p>
+  </Main>
+
+  <Footer />
+</Layout>

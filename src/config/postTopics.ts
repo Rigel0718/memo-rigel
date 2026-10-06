@@ -51,4 +51,10 @@ export const POST_TOPICS = {
       },
     },
   },
+  agentMemo: {
+    slug: "agent-memo",
+    title: "Agent memo",
+    description: "Agent를 공부하고 설계하며 마주친 질문과 생각을 기록합니다.",
+    series: {},
+  },
 } as const;
