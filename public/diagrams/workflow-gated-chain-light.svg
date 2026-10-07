@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 380" role="img" aria-labelledby="diagram-title diagram-desc">
+  <title id="diagram-title">Workflow follows predefined branches</title>
+  <desc id="diagram-desc">Input에서 LLM 1과 Gate를 거쳐 Next이면 LLM 2로, Stop이면 Output으로 이동하며 LLM 2도 Output으로 연결된다.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#0d9488"/></marker>
+    <marker id="return-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#2563eb"/></marker>
+  </defs>
+  <style>
+    .canvas{fill:#f8fafc}.node{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.5}.active{fill:#f0fdfa;stroke:#0d9488;stroke-width:1.5}
+    text{fill:#0f172a;font:600 19px ui-sans-serif,system-ui,sans-serif;text-anchor:middle}
+    .heading{font-size:26px;text-anchor:start}.eyebrow{fill:#0d9488;font:700 13px ui-monospace,monospace;letter-spacing:1.5px;text-anchor:start}
+    .label{fill:#0d9488;font-size:16px}.return-label{fill:#2563eb;font-size:16px}
+    .edge{fill:none;stroke:#0d9488;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrow)}
+    .return{fill:none;stroke:#2563eb;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:7 5;marker-end:url(#return-arrow)}
+  </style>
+  <rect class="canvas" width="760" height="380" rx="20"/>
+  <text x="32" y="36" class="eyebrow">WORKFLOW · PREDEFINED PATHS</text>
+  <text x="32" y="73" class="heading">Workflow follows predefined branches</text>
+  <rect class="node" x="32" y="147" width="100" height="64" rx="12"/><text x="82.0" y="186.0">Input</text><path class="edge" d="M132 179 H178"/><rect class="node" x="180" y="147" width="120" height="64" rx="12"/><text x="240.0" y="186.0">LLM 1</text><path class="edge" d="M300 179 H348"/><path class="active" d="M410 125 L470 179 L410 233 L350 179 Z"/><text x="410" y="186">Gate</text><path class="edge" d="M470 179 H518"/><text x="493" y="159" class="label">Next</text><rect class="node" x="520" y="147" width="120" height="64" rx="12"/><text x="580.0" y="186.0">LLM 2</text><path class="edge" d="M410 233 V307 H578"/><text x="447" y="275" class="label">Stop</text><path class="edge" d="M640 179 H700 V273"/><rect class="node" x="580" y="275" width="148" height="64" rx="12"/><text x="654.0" y="314.0">Output</text>
+</svg>

@@ -102,7 +102,7 @@ Tool을 사용한다고 모두 Agent라고 부르기는 어렵다. LLM이 여러
 
 OpenAI는 Agent를 **사용자를 대신해 Task를 독립적으로 수행하는 시스템**으로 설명한다.
 
-처음에는 이 설명만으로 조금 모호하게 느껴졌다. 그런데 OpenAI의 [![OpenAI](../../../../assets/brands/openai.svg) *A practical guide to building agents*](https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/)를 읽어보면 조금 더 분명한 기준이 나온다.
+처음에는 이 설명만으로 조금 모호하게 느껴졌다. 그런데 OpenAI의 <a href="https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/" target="_blank" rel="noopener noreferrer">![OpenAI](../../../../assets/brands/openai.svg) *A practical guide to building agents*</a>를 읽어보면 조금 더 분명한 기준이 나온다.
 단순히 LLM을 사용하는지가 아니라, **LLM이 Workflow의 실행을 관리하고 의사결정을 내리는지**를 구분해서 보고 있다.
 
 예를 들어 Chatbot이나 Sentiment Classifier도 LLM을 사용할 수 있다. Workflow 중간에 LLM을 넣어 특정 판단을 맡길 수도 있다.
@@ -111,38 +111,26 @@ OpenAI는 Agent를 **사용자를 대신해 Task를 독립적으로 수행하는
 
 반대로 Agent에서는 LLM이 현재 상황을 바탕으로 Tool을 선택하고, 그 결과를 확인하고, 다음 행동을 결정한다. 필요하다면 행동을 수정하고 언제 Task가 완료되었는지도 판단한다.
 
-```
-Goal
- ↓
-LLM
- ├─ 판단
- ├─ Tool 선택
- ├─ 결과 확인
- ├─ 다음 행동 결정
- └─ 완료 판단
-```
-
 LLM이 단순히 Workflow의 한 부분으로 사용되는 것과 **Workflow의 실행을 직접 관리하는 것** 사이에 차이를 두는 셈이다.
 
 ## Anthropic이 구분하는 Workflow와 Agent
 
 Anthropic의 설명에서는 이 차이가 조금 더 직접적으로 드러난다.
 
-Anthropic은 [![Anthropic](../../../../assets/brands/anthropic.svg) *Building effective agents*](https://www.anthropic.com/engineering/building-effective-agents)에서 LLM을 활용하는 시스템을 넓게 Agentic System으로 바라보면서, 그 안에서 **Workflow와 Agent를 구분한다.**
+Anthropic은 <a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener noreferrer">![Anthropic](../../../../assets/brands/anthropic.svg) *Building effective agents*</a>에서 LLM을 활용하는 시스템을 넓게 Agentic System으로 바라보면서, 그 안에서 **Workflow와 Agent를 구분한다.**
 
 Workflow에서는 LLM과 Tool이 미리 정의된 Code Path를 따라 실행된다.
 
-
-<div class="not-prose my-8 overflow-x-auto rounded-2xl" role="group" aria-label="Application에서 LLM Routing으로 이동하고 Workflow A, B, C 중 하나를 선택해 Result를 얻는 구조. 모바일에서는 가로로 스크롤할 수 있습니다.">
+<div class="not-prose my-8 overflow-x-auto rounded-2xl" role="group" aria-label="Input에서 LLM 1과 Gate를 거쳐 Next이면 LLM 2로, Stop이면 Output으로 이동하며 LLM 2도 Output으로 연결된다. 모바일에서는 가로로 스크롤할 수 있습니다.">
 <img
   class="block h-auto w-full min-w-[640px] max-w-none dark:hidden"
-  src="/memo-rigel/diagrams/workflow-llm-routing-light.svg"
-  alt="Application에서 LLM Routing으로 이동하고 Workflow A, B, C 중 하나를 선택해 Result를 얻는 구조"
+  src="/memo-rigel/diagrams/workflow-gated-chain-light.svg"
+  alt="Input에서 LLM 1과 Gate를 거쳐 Next이면 LLM 2로, Stop이면 Output으로 이동하며 LLM 2도 Output으로 연결된다"
 />
 <img
   class="hidden h-auto w-full min-w-[640px] max-w-none dark:block"
-  src="/memo-rigel/diagrams/workflow-llm-routing-dark.svg"
-  alt="Application에서 LLM Routing으로 이동하고 Workflow A, B, C 중 하나를 선택해 Result를 얻는 구조"
+  src="/memo-rigel/diagrams/workflow-gated-chain-dark.svg"
+  alt="Input에서 LLM 1과 Gate를 거쳐 Next이면 LLM 2로, Stop이면 Output으로 이동하며 LLM 2도 Output으로 연결된다"
 />
 </div>
 
@@ -151,15 +139,13 @@ Workflow에서는 LLM과 Tool이 미리 정의된 Code Path를 따라 실행된�
 
 ```text
 flowchart LR
-    A["Application"] --> L["LLM Routing"]
+    I["Input"] --> L1["LLM 1"]
+    L1 --> G{"Gate"}
 
-    L --> WA["Workflow A"]
-    L --> WB["Workflow B"]
-    L --> WC["Workflow C"]
+    G -->|"Next"| L2["LLM 2"]
+    G -->|"Stop"| O["Output"]
 
-    WA --> R["Result"]
-    WB --> R
-    WC --> R
+    L2 --> O
 ```
 
 </details>
@@ -268,21 +254,39 @@ Agent
 
 LLM이 고객의 문의를 분류하고, 분류 결과에 따라 적절한 Workflow를 선택한다.
 
+<div class="not-prose my-8 overflow-x-auto rounded-2xl" role="group" aria-label="고객 문의를 받은 Application의 LLM Routing이 중복 결제, 결제 실패, 결제 취소 Workflow 중 하나를 선택하고 고객 응대로 연결한다. 모바일에서는 가로로 스크롤할 수 있습니다.">
+<img
+  class="block h-auto w-full min-w-[640px] max-w-none dark:hidden"
+  src="/memo-rigel/diagrams/payment-workflow-routing-light.svg"
+  alt="고객 문의를 받은 Application의 LLM Routing이 중복 결제, 결제 실패, 결제 취소 Workflow 중 하나를 선택하고 고객 응대로 연결한다"
+/>
+<img
+  class="hidden h-auto w-full min-w-[640px] max-w-none dark:block"
+  src="/memo-rigel/diagrams/payment-workflow-routing-dark.svg"
+  alt="고객 문의를 받은 Application의 LLM Routing이 중복 결제, 결제 실패, 결제 취소 Workflow 중 하나를 선택하고 고객 응대로 연결한다"
+/>
+</div>
+
+<details>
+<summary>다이어그램 원본 보기 (Mermaid)</summary>
+
+```text
+flowchart LR
+    subgraph APP["Application"]
+        L["LLM Routing"]
+
+        L --> W1["중복 결제 Workflow"]
+        L --> W2["결제 실패 Workflow"]
+        L --> W3["결제 취소 Workflow"]
+    end
+
+    Q["고객 문의"] --> L
+    W1 --> R["고객 응대"]
+    W2 --> R
+    W3 --> R
 ```
-"고객이 중복 결제를 문의함"
-        ↓
-LLM Routing(Classification)
-        ↓
-중복 결제 Workflow
-        ↓
-결제 내역 조회
-        ↓
-중복 결제 여부 확인
-        ↓
-환불 Workflow
-        ↓
-고객 안내
-```
+
+</details>
 
 여기에도 LLM과 Tool이 모두 사용된다.
 
@@ -298,26 +302,33 @@ Application은 Agent에게 하나의 **Goal**을 주고, 결제 내역 조회, �
 
 > **"고객의 결제 문제를 해결하라."**
 
+<div class="not-prose my-8 overflow-x-auto rounded-2xl" role="group" aria-label="결제 문제 해결 Goal을 받은 Agent가 Tool에 Action을 수행하고 Observation을 받아 다시 판단하며 Goal 달성 시 종료한다. 모바일에서는 가로로 스크롤할 수 있습니다.">
+<img
+  class="block h-auto w-full min-w-[640px] max-w-none dark:hidden"
+  src="/memo-rigel/diagrams/payment-agent-tool-loop-light.svg"
+  alt="결제 문제 해결 Goal을 받은 Agent가 Tool에 Action을 수행하고 Observation을 받아 다시 판단하며 Goal 달성 시 종료한다. Tool: 결제 내역 조회, 고객 정보 확인, 환불"
+/>
+<img
+  class="hidden h-auto w-full min-w-[640px] max-w-none dark:block"
+  src="/memo-rigel/diagrams/payment-agent-tool-loop-dark.svg"
+  alt="결제 문제 해결 Goal을 받은 Agent가 Tool에 Action을 수행하고 Observation을 받아 다시 판단하며 Goal 달성 시 종료한다. Tool: 결제 내역 조회, 고객 정보 확인, 환불"
+/>
+</div>
+
+<details>
+<summary>다이어그램 원본 보기 (Mermaid)</summary>
+
+```text
+flowchart LR
+    G["Goal<br/>고객의 결제 문제를 해결하라"] --> A["Agent"]
+
+    A -->|"Action"| T["Tool<br/>결제 내역 조회 · 고객 정보 확인 · 환불"]
+    T -->|"Observation"| A
+
+    A -->|"Goal 달성"| E["종료"]
 ```
-Goal
-"고객의 결제 문제를 해결하라."
-        ↓
-Agent
-        ↓
-결제 내역 확인
-        ↓
-Observation
-        ↓
-필요한 추가 정보 판단
-        ↓
-Action
-        ↓
-Observation
-        ↓
-문제 해결 여부 판단
-        ↓
-종료
-```
+
+</details>
 
 이번에는 문제를 해결하는 과정 전체가 미리 정해져 있지 않다.
 

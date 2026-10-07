@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 480" role="img" aria-labelledby="diagram-title diagram-desc">
+  <title id="diagram-title">Application owns the workflows</title>
+  <desc id="diagram-desc">고객 문의를 받은 Application의 LLM Routing이 중복 결제, 결제 실패, 결제 취소 Workflow 중 하나를 선택하고 고객 응대로 연결한다.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#2dd4bf"/></marker>
+    <marker id="return-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#60a5fa"/></marker>
+  </defs>
+  <style>
+    .canvas{fill:#0f172a}.node{fill:#1e293b;stroke:#475569;stroke-width:1.5}.active{fill:#134e4a;stroke:#2dd4bf;stroke-width:1.5}
+    text{fill:#f1f5f9;font:600 19px ui-sans-serif,system-ui,sans-serif;text-anchor:middle}
+    .heading{font-size:26px;text-anchor:start}.eyebrow{fill:#2dd4bf;font:700 13px ui-monospace,monospace;letter-spacing:1.5px;text-anchor:start}
+    .label{fill:#2dd4bf;font-size:16px}.return-label{fill:#60a5fa;font-size:16px}
+    .edge{fill:none;stroke:#2dd4bf;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrow)}
+    .return{fill:none;stroke:#60a5fa;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:7 5;marker-end:url(#return-arrow)}
+  </style>
+  <rect class="canvas" width="760" height="480" rx="20"/>
+  <text x="32" y="36" class="eyebrow">WORKFLOW · PREDEFINED PATHS</text>
+  <text x="32" y="73" class="heading">Application owns the workflows</text>
+  <rect class="node" x="188" y="102" width="418" height="350" rx="16"/><text x="210" y="134" class="eyebrow">Application</text><rect class="node" x="24" y="245" width="138" height="64" rx="12"/><text x="93.0" y="284.0">고객 문의</text><path class="edge" d="M162 277 H212"/><rect class="active" x="214" y="245" width="166" height="64" rx="12"/><text x="297.0" y="284.0">LLM Routing</text><path class="edge" d="M380 277 H402 V191 H422"/><path class="edge" d="M380 277 H422"/><path class="edge" d="M380 277 H402 V363 H422"/><rect class="node" x="424" y="159" width="164" height="64" rx="12"/><text x="506" y="184">중복 결제</text><text x="506" y="208">Workflow</text><rect class="node" x="424" y="245" width="164" height="64" rx="12"/><text x="506" y="270">결제 실패</text><text x="506" y="294">Workflow</text><rect class="node" x="424" y="331" width="164" height="64" rx="12"/><text x="506" y="356">결제 취소</text><text x="506" y="380">Workflow</text><path class="edge" d="M588 191 H620 V277 H636"/><path class="edge" d="M588 277 H636"/><path class="edge" d="M588 363 H620 V277 H636"/><rect class="node" x="638" y="245" width="98" height="64" rx="12"/><text x="687.0" y="284.0">고객 응대</text>
+</svg>

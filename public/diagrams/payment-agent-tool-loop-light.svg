@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-labelledby="diagram-title diagram-desc">
+  <title id="diagram-title">결제 문제를 해결하는 Agent</title>
+  <desc id="diagram-desc">고객의 결제 문제를 해결하라는 Goal을 받은 Agent가 Tool에 Action을 수행하고 Observation을 받아 다음 행동을 판단한다. Tool은 결제 내역 조회, 고객 정보 확인, 환불을 제공한다. Agent는 Goal 달성 시 종료한다.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#0d9488"/></marker>
+    <marker id="return-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#2563eb"/></marker>
+  </defs>
+  <style>
+    .canvas{fill:#f8fafc}.node{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.5}.active{fill:#f0fdfa;stroke:#0d9488;stroke-width:1.5}
+    text{fill:#0f172a;font:600 19px ui-sans-serif,system-ui,sans-serif;text-anchor:middle}
+    .heading{font-size:26px;text-anchor:start}.eyebrow{fill:#0d9488;font:700 13px ui-monospace,monospace;letter-spacing:1.5px;text-anchor:start}
+    .label{fill:#0d9488;font-size:16px}.return-label{fill:#2563eb;font-size:16px}
+    .edge{fill:none;stroke:#0d9488;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrow)}
+    .return{fill:none;stroke:#2563eb;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:7 5;marker-end:url(#return-arrow)}
+  </style>
+  <style>
+    .detail{font-size:17px;font-weight:500}.tool-label{font-size:18px;text-anchor:start}
+    .icon{fill:none;stroke:#0d9488;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+  <rect class="canvas" width="800" height="450" rx="20"/>
+  <text class="eyebrow" x="32" y="36">AGENT · PAYMENT SUPPORT</text>
+  <text class="heading" x="32" y="73">Goal을 향해 행동하고, 결과를 관찰한다</text>
+  <rect class="node" x="32" y="164" width="194" height="116" rx="12"/>
+  <text x="129" y="196">Goal</text>
+  <text class="detail" x="129" y="230">고객의 결제 문제를</text>
+  <text class="detail" x="129" y="254">해결하라</text>
+  <path class="edge" d="M226 222 H270"/>
+  <rect class="active" x="272" y="187" width="130" height="70" rx="12"/>
+  <text x="337" y="229">Agent</text>
+  <path class="edge" d="M402 205 H558"/>
+  <text class="label" x="480" y="190">Action</text>
+  <path class="return" d="M560 241 H404"/>
+  <text class="return-label" x="480" y="268">Observation</text>
+  <rect class="node" x="560" y="132" width="208" height="180" rx="12"/>
+  <text x="664" y="164">Tool</text>
+  <g class="icon" aria-hidden="true">
+    <rect x="580" y="185" width="16" height="19" rx="2"/>
+    <path d="M584 190 H591 M584 195 H588"/>
+    <circle cx="595" cy="202" r="4"/><path d="m598 205 4 4"/>
+    <circle cx="590" cy="236" r="4"/><path d="M581 252 V249 C581 241 599 241 599 249 V252"/>
+    <path d="M600 281 A10 10 0 1 1 592 274 M592 269 V275 H598 M586 282 H594 M586 287 H592"/>
+  </g>
+  <text class="tool-label" x="614" y="204">결제 내역 조회</text>
+  <text class="tool-label" x="614" y="249">고객 정보 확인</text>
+  <text class="tool-label" x="614" y="294">환불</text>
+  <path class="edge" d="M337 257 V364"/>
+  <text class="label" x="398" y="330">Goal 달성</text>
+  <rect class="node" x="272" y="366" width="130" height="58" rx="12"/>
+  <text x="337" y="402">종료</text>
+</svg>
