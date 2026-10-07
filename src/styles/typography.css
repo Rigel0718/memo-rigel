@@ -47,6 +47,19 @@
       @apply border-border mx-auto border;
     }
 
+    a img:is([alt="OpenAI"], [alt="Anthropic"]) {
+      display: inline-block;
+      width: 2em;
+      height: 2em;
+      padding: 0.18em;
+      object-fit: contain;
+      margin: 0 0.2em 0 0;
+      border: 0;
+      border-radius: 50%;
+      vertical-align: middle;
+      background-color: white;
+    }
+
     img[role="button"] {
       @apply cursor-zoom-in;
 

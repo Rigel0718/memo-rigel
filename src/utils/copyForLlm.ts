@@ -18,15 +18,24 @@ interface MarkdownNode {
   position?: { start: { offset?: number }; end: { offset?: number } };
 }
 
-/** Only remove the presentation markup used by our Markdown diagrams. */
+/** Remove images and diagram presentation markup without rewriting Markdown. */
 function cleanMarkdown(body: string): string {
   const removals: { start: number; end: number }[] = [];
   const visit = (node: MarkdownNode) => {
+    if (
+      (node.type === "image" || node.type === "imageReference") &&
+      node.position
+    ) {
+      removals.push({
+        start: node.position.start.offset!,
+        end: node.position.end.offset!,
+      });
+      return;
+    }
     if (node.type === "html" && node.position) {
       const start = node.position.start.offset!;
       const html = body.slice(start, node.position.end.offset!);
-      const nodeRemovals: { start: number; end: number; diagram: boolean }[] =
-        [];
+      const nodeRemovals: { start: number; end: number; image: boolean }[] = [];
       const patterns = [
         /^[\t ]*<\/?details\s*>[\t ]*(?=\r?$)/gim,
         /<summary>\s*다이어그램 원본 보기\s*\(Mermaid\)\s*<\/summary>/gi,
@@ -35,25 +44,14 @@ function cleanMarkdown(body: string): string {
       for (const pattern of patterns) {
         for (const match of html.matchAll(pattern)) {
           const tag = match[0];
-          if (/^<img\b/i.test(tag)) {
-            const classes =
-              /\bclass\s*=\s*["']([^"']*)["']/i.exec(tag)?.[1].split(/\s+/) ??
-              [];
-            const src = /\bsrc\s*=\s*["']([^"']*)["']/i.exec(tag)?.[1] ?? "";
-            const isThemeDiagram =
-              /\/diagrams\/[^<>]*\.svg$/.test(src) &&
-              (classes.includes("dark:hidden") ||
-                (classes.includes("hidden") && classes.includes("dark:block")));
-            if (!isThemeDiagram) continue;
-          }
           nodeRemovals.push({
             start: match.index,
             end: match.index + tag.length,
-            diagram: /^<img\b/i.test(tag),
+            image: /^<img\b/i.test(tag),
           });
         }
       }
-      // Only discard a not-prose wrapper made empty by removing diagram images.
+      // Only discard a not-prose wrapper made empty by removing images.
       // Meaningful HTML, unrelated empty divs and code nodes remain untouched.
       const wrappers =
         /(<div\b(?:[^>"']|"[^"]*"|'[^']*')*>)([\s\S]*?)<\/div\s*>/gi;
@@ -67,7 +65,7 @@ function cleanMarkdown(body: string): string {
         const contained = nodeRemovals.filter(
           (range) => range.start >= contentStart && range.end <= contentEnd,
         );
-        if (!contained.some((range) => range.diagram)) continue;
+        if (!contained.some((range) => range.image)) continue;
         let content = match[2];
         for (const range of contained.sort((a, b) => b.start - a.start)) {
           content =
@@ -81,7 +79,7 @@ function cleanMarkdown(body: string): string {
         nodeRemovals.push({
           start: match.index,
           end: match.index + match[0].length,
-          diagram: false,
+          image: false,
         });
       }
       removals.push(

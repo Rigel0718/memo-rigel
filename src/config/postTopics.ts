@@ -55,6 +55,15 @@ export const POST_TOPICS = {
     slug: "agent-memo",
     title: "Agent memo",
     description: "Agent를 공부하고 설계하며 마주친 질문과 생각을 기록합니다.",
-    series: {},
+    series: {
+      reflectionsOnAgents: {
+        slug: "reflections-on-agents",
+        title: "Agent에 대한 고찰",
+        description: "Agent란 무엇인지, 어떻게 이해하고 설계할지 고찰합니다.",
+        metaDescription:
+          "Agent의 개념과 설계에 대한 질문과 생각을 담는 시리즈입니다.",
+        episodeCount: 1,
+      },
+    },
   },
 } as const;

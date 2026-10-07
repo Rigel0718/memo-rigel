@@ -24,7 +24,7 @@ async function copyData(body, title = "에피소드") {
   return createLlmCopyData(body, title, rendered.metadata.headings);
 }
 
-test("removes only diagram presentation HTML and preserves Mermaid and other HTML", async () => {
+test("removes images and diagram presentation HTML and preserves Mermaid and other HTML", async () => {
   const mermaid =
     '```text\nflowchart LR\n    A["Python<br/>Program"] --> B\n```';
   const diagram =
@@ -38,7 +38,7 @@ test("removes only diagram presentation HTML and preserves Mermaid and other HTM
   assert.ok(data.markdown.includes(mermaid));
   assert.ok(data.markdown.includes("<div>의미 있는 HTML</div>"));
   assert.ok(
-    data.markdown.includes('<img src="/memo-rigel/photo.png" alt="사진" />'),
+    !data.markdown.includes('<img src="/memo-rigel/photo.png" alt="사진" />'),
   );
   assert.ok(data.markdown.includes("<summary>의미 있는 요약</summary>"));
 });
@@ -177,4 +177,46 @@ test("all real Markdown posts map to Astro H2 slugs and retain diagram source fe
       true,
     );
   }
+});
+
+test("removes Markdown icons and images while preserving links, text and code", async () => {
+  const body = `## 장
+
+[![OpenAI](../../assets/brands/openai.svg) *공식 문서*](https://openai.com/)
+
+![사진](photo.png)
+
+![참조 이미지][photo]
+
+인라인 <img src="icon.svg" alt="아이콘" /> 설명
+
+\`![예제](example.png)\`
+
+\`\`\`markdown
+![예제](example.png)
+<img src="example.png" />
+\`\`\`
+
+[photo]: photo.png
+
+## 다음 장
+
+끝
+`;
+  const data = await copyData(body);
+  assert.ok(data.markdown.includes("[ *공식 문서*](https://openai.com/)"));
+  assert.ok(!data.markdown.includes("![OpenAI]"));
+  assert.ok(!data.markdown.includes("![사진]"));
+  assert.ok(!data.markdown.includes("![참조 이미지]"));
+  assert.ok(data.markdown.includes("인라인  설명"));
+  assert.ok(data.markdown.includes("`![예제](example.png)`"));
+  assert.ok(
+    data.markdown.includes(
+      '```markdown\n![예제](example.png)\n<img src="example.png" />\n```',
+    ),
+  );
+  assert.equal(
+    data.markdown.slice(data.sections[1].start, data.sections[1].end),
+    "## 다음 장\n\n끝\n",
+  );
 });
