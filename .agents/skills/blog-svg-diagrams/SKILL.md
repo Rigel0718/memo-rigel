@@ -1,106 +1,199 @@
 ---
 name: blog-svg-diagrams
-description: Create and maintain polished, accessible, theme-aware SVG diagrams for this AstroPaper technical blog while preserving an LLM-readable semantic source in Markdown. Use when adding or editing blog diagrams, architecture visuals, sequence diagrams, process flows, or converting Mermaid to SVG.
+description: Create and maintain clear, technically accurate SVG diagrams for this AstroPaper technical blog. Use when creating, editing, or integrating architecture diagrams, sequence diagrams, flows, process diagrams, or other technical visuals. Preserve the blog's visual language and an LLM-readable semantic source, and load project-specific references only when needed.
 ---
 
 # Blog SVG Diagrams
 
-Create clear, technically accurate SVG diagrams for the AstroPaper blog. Own the visual design; follow the repository's existing design language rather than rigidly copying a template.
+Create clear, technically accurate SVG diagrams that help readers understand technical concepts at a glance.
 
-## 1. Inspect before designing
+The diagram is a visual aid for the article, not a replacement for its explanation.
 
-1. Read `PROJECT.md`, then inspect the relevant Markdown post when one is in scope, `astro.config.ts`, the AstroPaper theme implementation, and existing diagrams under `public/diagrams/`.
-2. Treat existing diagrams, especially `public/diagrams/os-architecture.svg` when present, as visual references, not immutable templates.
-3. Identify the article's teaching objective, or the intended message when no article is in scope, and choose the diagram type that best communicates it:
-   - Layered architecture: boundaries and responsibilities.
-   - Sequence diagram: chronological requests, processing, and returns.
-   - Flowchart: decisions and control flow.
-   - Process/tree diagram: parent-child relationships and resource ownership.
-4. Preserve technical distinctions. If the source description is ambiguous or misleading, correct the diagram and briefly explain the correction.
+## 1. Understand before drawing
 
-## 2. Visual principles
+Before designing a diagram:
 
-### Information density
+1. Read `PROJECT.md` and the relevant article.
+2. Identify the single concept the diagram should communicate.
+3. Inspect existing diagrams under `public/diagrams/` for the blog's visual language.
+4. Choose the representation that best matches the concept.
 
-- Each diagram should communicate one primary concept.
-- Prefer 3–5 major visual elements whenever possible.
-- Do not visualize every technical detail from the article.
-- Leave implementation details, exceptions, and caveats in the surrounding prose.
-- If a diagram requires too many arrows or annotations, simplify it or split it into separate diagrams.
-- Visual clarity takes priority over information density.
-- Treat diagrams as visual aids for the article, not replacements for the article's explanations.
+Use:
 
-### Visual design
+- **Architecture** for boundaries and responsibilities.
+- **Sequence** for chronological interactions.
+- **Flowchart** for decisions and control flow.
+- **Process/tree** for ownership and parent-child relationships.
 
-- Produce clean, professional, editorial-quality diagrams suitable for a technical blog.
-- Favor legible typography, restrained colors, consistent spacing, aligned elements, subtle borders, and purposeful whitespace.
-- Use the existing blog's colors, typography, and visual conventions where practical. A teal accent is appropriate if it matches existing diagrams.
-- Differentiate concepts with position, labels, line styles, and grouping—not color alone.
-- Use solid arrows for requests/actions and dashed arrows for returns only when that distinction is meaningful. Include clear labels.
-- Avoid gratuitous decoration, tiny text, dense layouts, and unnecessary animation.
-- Keep all meaningful labels as SVG `<text>` elements rather than converting text to paths. Use local/system font fallbacks; never require remote fonts.
-- Use an appropriate `viewBox`; test readability at typical article and mobile widths. If a wide diagram cannot be made legible on mobile, prefer a responsive alternative or a deliberate horizontal-scroll container over microscopic text.
+Do not force a concept into a diagram type that makes it less accurate.
 
-## 3. Light and dark themes
+If the article's description is technically ambiguous or misleading, preserve the correct technical distinction rather than reproducing the ambiguity.
 
-The diagram must follow the **blog's selected theme**, including when it differs from the operating system's theme. Maintain identical content, geometry, spacing, arrow routing, and reading order across themes; change presentation colors only.
+## 2. Design for understanding
 
-1. Inspect how the actual AstroPaper version applies and persists theme choice before selecting an implementation.
-2. Do **not** assume `prefers-color-scheme` alone is sufficient: an SVG loaded via Markdown `![...](...)` or HTML `<img>` cannot generally inherit its parent page's classes or CSS custom properties.
-3. Choose the simplest reliable approach for the actual project:
-   - If embedding permits shared CSS/theme variables, use one SVG with theme-aware styling.
-   - For external `<img>` assets, consider matching `-light.svg` and `-dark.svg` variants selected using the site's actual theme state, such as existing theme classes or a reusable Astro component. A CSS `<picture>` media query is sufficient only when the site follows the OS preference without an independent manual override.
-   - If using SVG-internal `prefers-color-scheme`, explicitly verify manual site theme overrides still work; otherwise choose another approach.
-4. Make text, arrows, boundaries, activation bars, and subtle annotations readable in both themes. Maintain sufficient contrast without excessive glow or harsh highlights.
-5. Avoid introducing a second theme state manager or breaking the site's existing theme toggle. Reuse existing theme behavior.
+Each diagram should communicate **one primary concept**.
 
-## 4. Preserve an LLM-readable semantic source
+Prefer:
 
-An image-only Markdown reference is insufficient: users copy raw `.md` posts into LLMs for technical questions. Keep a compact, editable textual description of the **same** diagram in the post.
+- 3–5 major visual elements when possible.
+- Clear hierarchy and reading order.
+- Consistent spacing and alignment.
+- Restrained use of color.
+- Short, meaningful labels.
+- Purposeful whitespace.
 
-- For sequence diagrams and flows, prefer a Mermaid source block.
-- For custom architecture diagrams where Mermaid would misrepresent layout, use a concise structured Markdown outline or accurate Mermaid abstraction.
-- When displaying an external SVG, place its semantic source in a collapsible `<details>` section near the image, using a fenced `text` block if the intent is to display raw Mermaid without triggering automatic Mermaid rendering. Verify that the site's Markdown pipeline supports this syntax.
-- The SVG and semantic source must describe the same participants, boundaries, directions, ordering, and important labels. Update both together.
-- Do not paste generated SVG XML into the blog article merely to preserve semantics; keep the article readable.
+Use position, grouping, labels, boundaries, and line styles to communicate meaning before relying on color.
 
-Example post pattern; replace the asset URL with the path derived from the project's current Astro `base` configuration:
+Avoid:
 
-    ![Python requests file data from the Linux kernel](BASE_PATH/diagrams/system-call-sequence.svg)
+- Visualizing every detail from the article.
+- Dense networks of arrows.
+- Long explanations inside the diagram.
+- Tiny text.
+- Decorative elements that do not communicate meaning.
 
-    <details>
-    <summary>다이어그램 원본 보기 (Mermaid)</summary>
+If a diagram becomes difficult to understand without explanation, simplify it or split it into multiple diagrams.
 
-    ```text
-    sequenceDiagram
-        participant P as Python Program
-        participant K as Linux Kernel
-        P->>K: read(fd, 100)
-        K-->>P: Return data
-    ```
+Visual clarity takes priority over information density.
 
-    </details>
+## 3. Preserve technical accuracy
 
-Do not copy `BASE_PATH` literally into a post. Inspect the project's current configuration and existing base-path convention first.
+Simplify presentation, not meaning.
 
-## 5. Technical accuracy and accessibility
+Important participants, boundaries, directions, ordering, and ownership relationships must remain technically correct.
 
-- Show conceptual simplifications explicitly in a nearby caption or note.
-- In syscall diagrams, distinguish the Python function call, actual OS syscall, CPU privilege transition, kernel processing, and return. Do not imply that the kernel's file-system subsystem is a separate process.
-- In process diagrams, `fork()` creates a child while `execve()` replaces a process image without creating another PID.
-- Include meaningful `<title>` and `<desc>` inside each SVG, descriptive Markdown alt text, and an accessible reading order.
-- Avoid external scripts, external resources, and embedded raster screenshots unless explicitly justified.
+Do not introduce a visual structure that implies behavior that does not actually exist.
 
-## 6. Deliverables and validation
+When a useful diagram requires conceptual simplification, make that simplification explicit in the surrounding article, caption, or annotation.
 
-1. Create or edit SVG assets in `public/diagrams/`, using descriptive kebab-case filenames.
-2. Integrate the diagram into the requested Markdown article, or provide the exact snippet when article edits were not requested.
-3. Add or update its nearby LLM-readable semantic source when an article is in scope.
-4. Verify that the SVG is valid, all labels fit, arrows connect correctly, and no text is clipped.
-5. Check light mode, dark mode, manual theme overrides, desktop width, and mobile width using the project's available preview/build workflow. Do not claim visual checks were performed if they were not.
-6. Follow the repository's validation policy: for SVG/Markdown-only changes, inspect the targeted diff and validate SVG and Markdown syntax; run `npm run build` when code, configuration, Markdown integration, Content Collection behavior, or rendering behavior changes.
-7. In the final summary, briefly state the files changed, how theme switching works, where the semantic source lives, and any technical simplifications or unverified visual aspects.
+Keep meaningful labels as SVG `<text>` elements and maintain an accessible reading order.
 
-## Working style
+## 4. Follow the blog's visual language
 
-Make sensible design decisions independently. Ask for clarification only when a missing technical fact would change the diagram's meaning or implementation. Avoid adding dependencies for a diagram unless the existing stack genuinely needs them. Keep changes scoped to the diagram, its integration, and minimal necessary theme support.
+Existing diagrams are visual references, not immutable templates.
+
+Reuse the blog's established conventions where they improve consistency:
+
+- typography
+- spacing
+- border treatment
+- accent usage
+- arrow styles
+- grouping
+- light/dark presentation
+
+Do not copy an existing layout when a different structure communicates the concept better.
+
+The diagram should remain readable at normal article width and mobile width.
+
+## 5. Preserve an LLM-readable semantic source
+
+The SVG must not become the only representation of the concept.
+
+When integrating a diagram into an article, keep a compact textual representation of the same diagram nearby.
+
+Prefer:
+
+- Mermaid for sequences and flows.
+- Structured Markdown for custom architecture diagrams that Mermaid cannot represent accurately.
+
+The semantic source and SVG must agree on the important:
+
+- participants
+- boundaries
+- relationships
+- directions
+- ordering
+- labels
+
+Update both together when the diagram changes.
+
+Do not embed generated SVG XML in the article merely to preserve semantics.
+
+## 6. Use references only when needed
+
+Do not load every reference for every diagram.
+
+Read the relevant reference when the task requires implementation details beyond the core design principles in this skill.
+
+### `references/visual-design.md`
+
+Read when:
+
+- creating a new visual style or unfamiliar diagram structure
+- deciding typography, spacing, arrow, boundary, or annotation conventions
+- a diagram is becoming visually dense
+- mobile readability is difficult
+- accessibility or contrast needs closer inspection
+
+Contains detailed visual and accessibility conventions.
+
+### `references/theme-integration.md`
+
+Read when:
+
+- creating or changing light/dark SVG variants
+- integrating an SVG with the blog's manual theme toggle
+- deciding between external SVG variants, inline SVG, or other theme-aware approaches
+- theme behavior is unclear or existing behavior has changed
+
+Contains AstroPaper-specific theme integration details and constraints.
+
+### `references/astro-integration.md`
+
+Read when:
+
+- adding an SVG to a Markdown article
+- determining the correct asset/base path
+- adding the collapsible semantic source
+- changing Markdown rendering or Content Collection behavior
+- deciding which validation or build command is required
+
+Contains project-specific integration and validation procedures.
+
+### Domain-specific references
+
+Read a domain reference only when the diagram depends on technical distinctions that are easy to misrepresent visually.
+
+For example, an OS/process reference may contain rules for:
+
+- syscall boundaries
+- user/kernel mode transitions
+- `fork()` vs `execve()`
+- file descriptors and process relationships
+
+Do not load domain-specific references for unrelated diagrams.
+
+## 7. Workflow
+
+1. Read the relevant article and project context.
+2. Identify the diagram's single teaching objective.
+3. Inspect existing diagrams for visual context.
+4. Choose the appropriate representation.
+5. Load additional references only when the task requires them.
+6. Create or update the SVG.
+7. Keep the semantic source synchronized.
+8. Validate the changed diagram and its integration.
+
+Keep changes scoped to the diagram, its semantic representation, and the minimum integration required.
+
+## Deliverables
+
+When an article is in scope:
+
+- create or update the SVG under `public/diagrams/`
+- integrate it into the article
+- preserve the nearby LLM-readable semantic source
+
+When only a diagram is requested:
+
+- create or update the SVG
+- provide the integration snippet when useful
+
+In the final summary, briefly state:
+
+- what changed
+- where the semantic source lives
+- how theme handling works when relevant
+- any intentional technical simplifications
+- anything that could not be visually verified

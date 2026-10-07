@@ -1,0 +1,7 @@
+interface:
+  display_name: "Blog SVG Diagrams"
+  short_description: "Create clear, theme-aware SVG diagrams for technical blog posts."
+  default_prompt: "Use $blog-svg-diagrams to create or update a technically accurate SVG diagram for this blog."
+
+policy:
+  allow_implicit_invocation: true
