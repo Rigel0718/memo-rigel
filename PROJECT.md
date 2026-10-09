@@ -43,7 +43,7 @@
 
 게시물 디렉터리의 하위 폴더는 URL 경로가 될 수 있지만, 이름이 `_`로 시작하는 폴더 segment는 URL에서 제외된다. 예를 들어 `_releases/astro-paper-6.md`는 `/posts/astro-paper-6` 형태가 된다. `getPostPaths.ts`가 이 규칙과 locale/base 적용을 한곳에서 처리한다.
 
-`postFilter()`는 draft를 항상 제외하고, production에서는 예약 시간이 지나지 않은 글도 제외한다. development에서는 작성 편의를 위해 draft가 아닌 예약 글을 표시한다. `getSortedPosts()`는 이 필터를 적용한 뒤 `modDatetime` 우선, 없으면 `pubDatetime` 기준 최신순으로 정렬한다. tag 목록과 archive도 같은 필터 계열을 사용한다. 컬렉션 `Python 개념 톺아보기`, `Python으로 이해하기`, `Agent memo`, 그리고 `파이썬 객체에 대한 이해`, `파이썬 실행에 대한 이해`, `파이썬 함수와 method에 대한 이해`, `Python으로 이해하는 운영체제`, `Agent에 대한 고찰` 시리즈의 제목, 설명, slug, 전체 에피소드 수는 `src/config/postTopics.ts`에서 함께 관리한다.
+`postFilter()`는 draft를 항상 제외하고, production에서는 예약 시간이 지나지 않은 글도 제외한다. development에서는 작성 편의를 위해 draft가 아닌 예약 글을 표시한다. `getSortedPosts()`는 이 필터를 적용한 뒤 `modDatetime` 우선, 없으면 `pubDatetime` 기준 최신순으로 정렬한다. tag 목록과 archive도 같은 필터 계열을 사용한다. 컬렉션 `Python 개념 톺아보기`, `Python으로 이해하기`, `Agent memo`, 그리고 `파이썬 객체에 대한 이해`, `파이썬 실행에 대한 이해`, `파이썬 함수와 method에 대한 이해`, `Python으로 이해하는 운영체제`, `Agent에 대한 고찰`, `Agent 설계 노트` 시리즈의 제목, 설명, slug, 전체 에피소드 수는 `src/config/postTopics.ts`에서 함께 관리한다.
 
 AstroPaper에 포함되어 있던 예제 게시물은 제거된 상태다. 새 글은 `src/content/posts/`에 Markdown 또는 MDX 파일로 추가하며, About 콘텐츠는 `src/content/pages/about.md`에서 관리한다.
 
@@ -54,8 +54,9 @@ AstroPaper에 포함되어 있던 예제 게시물은 제거된 상태다. 새 �
 - `/`: featured 글과 최근 글을 보여 주는 홈.
 - `/posts`: 주제별 게시물 허브 목록. `Python 개념 톺아보기`, `Python으로 이해하기`, `Agent memo` 컬렉션을 표시하며, 개별 에피소드는 이 페이지에 직접 표시하지 않는다.
 - `/posts/<slug>`: Markdown/MDX 본문, 날짜, tag, 공유 링크, 시리즈 순서 기반 인접 글 navigation, 우측 Sticky TOC, 읽기 진행률, heading anchor, code copy, 이미지 lightbox를 제공하는 상세 페이지.
-- `/posts/agent-memo`: `Agent memo` 컬렉션 허브. 설명은 `Agent를 공부하고 설계하며 마주친 질문과 생각을 기록합니다.`이며, `Agent에 대한 고찰` 시리즈를 포함한다.
+- `/posts/agent-memo`: `Agent memo` 컬렉션 허브. 설명은 `Agent를 공부하고 설계하며 마주친 질문과 생각을 기록합니다.`이며, `Agent에 대한 고찰`, `Agent 설계 노트` 시리즈를 포함한다.
 - `/posts/agent-memo/reflections-on-agents`: `Agent에 대한 고찰` 시리즈의 에피소드 목차와 게시 진행률을 보여 준다. 현재 계획된 에피소드는 1편이며, `src/content/posts/agent-memo/reflections-on-agents/01-what-is-an-agent.md`는 본문이 없는 초안(`draft: true`)이다. 같은 디렉터리에 작성용 `_episode-template.md`를 둔다.
+- `/posts/agent-memo/agent-design-notes`: `Agent 설계 노트` 시리즈의 에피소드 목차와 게시 진행률을 보여 준다. 설명은 `Agent 시스템을 구현하며 마주한 설계 문제와 선택의 이유를 기록합니다.`이며, 현재 계획된 에피소드는 1편이다. `src/content/posts/agent-memo/agent-design-notes/01-episode-title.md`는 본문이 없는 초안(`draft: true`)이며, 같은 디렉터리에 작성용 `_episode-template.md`를 둔다.
 - `/posts/python`: `Python 개념 톺아보기` 컬렉션의 객체, 실행, 함수와 Method 시리즈를 소개하는 허브.
 - `/posts/python/understanding-python-objects`: `파이썬 객체에 대한 이해` 시리즈의 8개 에피소드 목차와 게시 진행률을 보여 준다. `src/content/posts/python/understanding-python-objects/`의 게시물을 파일명 순서로 자동 수집한다.
 - `/posts/python/understanding-python-execution`: `파이썬 실행에 대한 이해` 시리즈의 11개 에피소드 목차와 게시 진행률을 보여 준다. `src/content/posts/python/understanding-python-execution/`의 게시물을 파일명 순서로 자동 수집한다.
