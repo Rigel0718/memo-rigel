@@ -56,7 +56,7 @@ AstroPaper에 포함되어 있던 예제 게시물은 제거된 상태다. 새 �
 - `/posts/<slug>`: Markdown/MDX 본문, 날짜, tag, 공유 링크, 시리즈 순서 기반 인접 글 navigation, 우측 Sticky TOC, 읽기 진행률, heading anchor, code copy, 이미지 lightbox를 제공하는 상세 페이지.
 - `/posts/agent-memo`: `Agent memo` 컬렉션 허브. 설명은 `Agent를 공부하고 설계하며 마주친 질문과 생각을 기록합니다.`이며, `Agent에 대한 고찰`, `Agent 설계 노트` 시리즈를 포함한다.
 - `/posts/agent-memo/reflections-on-agents`: `Agent에 대한 고찰` 시리즈의 에피소드 목차와 게시 진행률을 보여 준다. 현재 계획된 에피소드는 1편이며, `src/content/posts/agent-memo/reflections-on-agents/01-what-is-an-agent.md`는 본문이 없는 초안(`draft: true`)이다. 같은 디렉터리에 작성용 `_episode-template.md`를 둔다.
-- `/posts/agent-memo/agent-design-notes`: `Agent 설계 노트` 시리즈의 에피소드 목차와 게시 진행률을 보여 준다. 설명은 `Agent 시스템을 구현하며 마주한 설계 문제와 선택의 이유를 기록합니다.`이며, 현재 계획된 에피소드는 1편이다. `src/content/posts/agent-memo/agent-design-notes/01-episode-title.md`는 본문이 없는 초안(`draft: true`)이며, 같은 디렉터리에 작성용 `_episode-template.md`를 둔다.
+- `/posts/agent-memo/agent-design-notes`: `Agent 설계 노트` 시리즈의 에피소드 목차와 게시 진행률을 보여 준다. 설명은 `Agent 시스템을 구현하며 마주한 설계 문제와 선택의 이유를 기록합니다.`이며, 현재 계획된 에피소드는 2편이다. `src/content/posts/agent-memo/agent-design-notes/`에 01편 `Agent에게 Tool을 사용할 권한을 어디까지 줄 것인가?`와 초안(`draft: true`)인 02편 `Agent의 실행이 중단되면 누가 다시 이어가야 하는가?`를 두며, 같은 디렉터리에 작성용 `_episode-template.md`를 둔다.
 - `/posts/python`: `Python 개념 톺아보기` 컬렉션의 객체, 실행, 함수와 Method 시리즈를 소개하는 허브.
 - `/posts/python/understanding-python-objects`: `파이썬 객체에 대한 이해` 시리즈의 8개 에피소드 목차와 게시 진행률을 보여 준다. `src/content/posts/python/understanding-python-objects/`의 게시물을 파일명 순서로 자동 수집한다.
 - `/posts/python/understanding-python-execution`: `파이썬 실행에 대한 이해` 시리즈의 11개 에피소드 목차와 게시 진행률을 보여 준다. `src/content/posts/python/understanding-python-execution/`의 게시물을 파일명 순서로 자동 수집한다.

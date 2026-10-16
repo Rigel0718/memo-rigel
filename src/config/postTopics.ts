@@ -71,7 +71,7 @@ export const POST_TOPICS = {
           "Agent 시스템을 구현하며 마주한 설계 문제와 선택의 이유를 기록합니다.",
         metaDescription:
           "Agent 시스템을 구현하며 마주한 설계 문제와 선택의 이유를 기록합니다.",
-        episodeCount: 1,
+        episodeCount: 2,
       },
     },
   },
