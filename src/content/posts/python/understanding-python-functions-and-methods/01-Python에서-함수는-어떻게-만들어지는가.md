@@ -11,8 +11,6 @@ tags:
 draft: False
 ---
 
-# 01. Python에서 함수는 어떻게 만들어지는가?
-
 Python에서 함수를 정의할 때는 `def` 키워드를 사용한다.
 
 ```python
