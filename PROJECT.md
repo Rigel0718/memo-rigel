@@ -15,6 +15,7 @@
 - `src/styles/`: Tailwind 진입점과 theme token, typography 규칙. `global.css`가 나머지 스타일과 callout theme를 불러온다.
 - `src/assets/`: Astro가 처리하는 이미지와 SVG 아이콘. 글에서 빌드 파이프라인을 거쳐 사용할 자산을 둔다.
 - `public/`: favicon, 기본 OG 이미지와 같은 원본 그대로 배포할 정적 파일. `public/pagefind/`는 build 후 복사된 검색 bundle/index이며 `.gitignore`로 Git에서 제외한다. 배포 시에는 GitHub Actions의 build가 색인을 새로 만든다.
+- `series-plans/`: 시리즈별 목차와 편별 계획을 담는 작성용 Markdown. `<collection-slug>/<series-slug>.md` 구조이며 게시·build 대상이 아니다.
 - `.github/workflows/deploy.yml`: `main` push 또는 수동 실행 시 GitHub Pages를 build하고 deploy하는 workflow다.
 
 ## 설정 구조

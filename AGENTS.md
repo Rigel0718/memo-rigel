@@ -112,6 +112,8 @@ Astro의 Content Collections와 기존 AstroPaper의 post 구조에서 자연스
 
 시리즈 route와 에피소드 디렉터리는 소속 컬렉션의 slug 아래에 둔다.
 
+시리즈의 목차와 편별 계획은 `series-plans/<collection-slug>/<series-slug>.md`에 둔다. 게시되지 않는 작성용 문서이며, 에피소드를 기획하거나 쓰기 전에 해당 파일이 있으면 확인한다.
+
 ### Python 시리즈 추가
 
 새 Python 시리즈는 소속 컬렉션을 선택하고 기존 시리즈와 같은 구조로 추가한다. 아래의 `<collection-slug>`는 `python` 또는 `understanding-with-python`이다.
