@@ -3,7 +3,7 @@
 - 컬렉션: `Python 개념 톺아보기` (`python`)
 - 에피소드 디렉터리: `src/content/posts/python/understanding-python-functions-and-methods/`
 - 전체 편수: 7편 (`src/config/postTopics.ts`의 `episodeCount`)
-- 진행 상황: 01~04편 게시
+- 진행 상황: 01~05편 게시
 
 에피소드마다 하나의 핵심 질문이 분명하게 드러나도록 구성한다.
 
@@ -37,9 +37,13 @@ Function Object → Higher-order Function → Wrapper → Closure → `@decorato
 
 ### 05. Class 안에 정의한 함수는 어떻게 Method가 되는가?
 
-Class Namespace → Function Object → Attribute Lookup → Descriptor → `__get__()` → Method Binding
+Class Body 실행 → Class Namespace ≠ Enclosing Scope → `__get__()` → Lookup 위치와 Binding
 
 Class 내부의 Function이 Instance를 통해 접근될 때 무엇이 달라지는지 이해한다.
+
+- 관점: Method 여부는 정의한 위치가 아니라 Attribute Lookup에서 Function을 Class 쪽에서 찾았는가로 정해진다.
+- 「파이썬 객체에 대한 이해」 06편이 Descriptor, Data/Non-data 우선순위, Bound Method 개념, instance attribute로 method를 가리는 예를 이미 다룬다. 이 내용은 반복하지 않고 06편을 링크한다.
+- 06편으로 넘긴 것: `__func__`/`__self__`, 호출 시 인자 전달 구조, `p.hello is p.hello`가 `False`인 이유, `self` 이름 관례.
 
 ### 06. Bound Method는 Instance를 어떻게 전달하는가?
 
