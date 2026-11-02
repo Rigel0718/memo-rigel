@@ -108,6 +108,7 @@ Astro의 Content Collections와 기존 AstroPaper의 post 구조에서 자연스
 
 - `Python 개념 톺아보기`(`POST_TOPICS.python`, `python`): 파이썬 객체, 실행, 함수와 Method 시리즈.
 - `Python으로 이해하기`(`POST_TOPICS.understandingWithPython`, `understanding-with-python`): `Python으로 이해하는 운영체제` 시리즈. 설명은 `Python을 통해 개발의 기반이 되는 원리와 구조를 이해합니다.`로 사용한다.
+- `Agent memo`(`POST_TOPICS.agentMemo`, `agent-memo`): `Agent에 대한 고찰`, `Agent 설계 노트` 시리즈. 설명은 `Agent를 공부하고 설계하며 마주친 질문과 생각을 기록합니다.`로 사용한다.
 
 시리즈 route와 에피소드 디렉터리는 소속 컬렉션의 slug 아래에 둔다.
 
